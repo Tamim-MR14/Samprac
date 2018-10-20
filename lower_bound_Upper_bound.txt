@@ -1,0 +1,29 @@
+#include<iostream>
+using namespace std;
+int low = 0, high = 5;
+int arr[10] = { 1,4,5,5,7,9};
+int index = 0;
+void binarys(int k, int mid) {
+	if (low > high) {
+		return;
+	}
+	else if (k == arr[mid]) {
+		index = mid;
+		low = mid + 1;
+		return binarys(k, (low + high) / 2);
+	}
+	else if (k > arr[mid]) {
+		low = mid + 1;
+		return binarys(k, (low + high) / 2);
+	}
+	else if (k < arr[mid]) {
+		high = mid - 1;
+		return binarys(k, (low + high) / 2);
+	}
+}
+int main() {
+	binarys(8, (low+high)/2);
+	cout  << arr[high] << " " << arr[low];
+	system("pause");
+	return 0;
+}

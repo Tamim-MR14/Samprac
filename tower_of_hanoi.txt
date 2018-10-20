@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int low = 0, high = 5;
+int arr[10] = {0,0,0};
+int index = 0;
+void hanoi(int n, int s, int d, int a) {
+	if (n == 0) {
+		arr[0] = d;
+	}
+	else {
+		hanoi(n - 1, s, a, d);
+		arr[n] = d;
+		hanoi(n - 1, a, d, s);
+	}
+}
+int main() {
+	hanoi(2,0,2,1);
+	for (int i = 0; i < 3; i++) {
+		cout << arr[i];
+	}
+	system("pause");
+	return 0;
+}

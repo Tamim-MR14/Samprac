@@ -1,0 +1,66 @@
+#include<iostream>
+using namespace std;
+class queue {
+	int head, tail, cap;
+	char arr[100];
+public:
+	queue(int capacity) {
+		head = -1;
+		tail = -1;
+		cap = capacity;
+	}
+
+	void enqueue(int x) {
+		if (tail == -1) {
+			tail = 0;
+			head = 0;
+			arr[tail] = x;
+
+		}
+		else if (head == (tail + 1) % cap) {
+			cout << "The queue is full.";
+		}
+		else {
+			tail = (tail + 1) % cap;
+			arr[tail] = x;
+		}
+	}
+
+	int dequeue() {
+		if (head == -1) {
+			cout << "The queue is empty." << endl;
+
+		}
+		else if (head == tail) {
+			tail--;
+			int x = arr[head];
+			head--;
+			return  x;
+		}
+		else {
+			int x = arr[head];
+			head = (head + 1) % cap;
+			return x;
+		}
+	}
+
+	bool is_empty() {
+		if (head == -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+};
+
+int main() {
+	queue a(3);
+	//cout << a.dequeue() << endl;
+	a.enqueue(5);
+	int b = a.dequeue();
+	cout << b << endl;
+	cout << a.is_empty();
+	system("pause");
+	return 0;
+}

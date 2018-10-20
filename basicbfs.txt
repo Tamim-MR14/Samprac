@@ -1,0 +1,115 @@
+#include<iostream>
+using namespace std;
+
+int edges[10][10], parent[10], visited[10], level[10],cnt[10], N, E;
+
+
+class queue {
+	int head, tail, cap;
+	char arr[100];
+public:
+	queue(int capacity) {
+		head = -1;
+		tail = -1;
+		cap = capacity;
+	}
+
+	void enqueue(int x) {
+		if (tail == -1) {
+			tail = 0;
+			head = 0;
+			arr[tail] = x;
+
+		}
+		else if (head == (tail + 1) % cap) {
+			cout << "The queue is full.";
+		}
+		else {
+			tail = (tail + 1) % cap;
+			arr[tail] = x;
+		}
+	}
+
+	int dequeue() {
+		if (head == -1) {
+			throw "The queue is empty";
+
+		}
+		else if (head == tail) {
+			tail--;
+			int x = arr[head];
+			head--;
+			return  x;
+		}
+		else {
+			int x = arr[head];
+			head = (head + 1) % cap;
+			return x;
+		}
+	}
+
+	bool is_empty() {
+		if (head == -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+};
+
+void bfs(int n, queue a) {
+	a.enqueue(n);
+	level[n - 1] = 0;
+	while (!a.is_empty()) {
+		int b = a.dequeue();
+		for (int i = 0; i < cnt[b - 1]; i++) {
+			if (level[edges[b - 1][i]-1] == -1) {
+				level[edges[b - 1][i]-1] = level[b - 1] + 1;
+				parent[edges[b - 1][i] - 1] = b;
+				a.enqueue(edges[b - 1][i]);
+			}
+		}
+	}
+}
+
+
+
+
+int main() {
+	/*queue a(3);
+	//cout << a.dequeue() << endl;
+	a.enqueue(5);
+	
+	try {
+		cout << a.dequeue() << endl;
+		int b = a.dequeue();
+		cout << b << endl;
+		cout << a.is_empty();
+		cout << a.dequeue() << endl;
+	}catch (const char* msg) {
+		cerr << msg << endl;
+	}*/
+
+	N = 10;
+	int E = 13;
+	int a, b;
+	for (int i = 0; i < N; i++) {
+		cnt[i] = 0;
+		level[i] = -1;
+	}
+	for (int i = 0; i < E; i++) {
+		cin >> a >> b;
+		edges[a - 1][cnt[a - 1]] = b;
+		cnt[a - 1]++;
+		edges[b - 1][cnt[b - 1]] = a;
+		cnt[b - 1]++;
+	}
+	queue c(100);
+	bfs(1, c);
+	for (int i = 0; i < N; i++) {
+		cout << level[i];
+	}
+	system("pause");
+	return 0;
+}

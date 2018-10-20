@@ -1,0 +1,81 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int position[16], res[16][16],taken[16],t=0,N,n[10];
+bool isprime(int num, int i)
+{
+	if (i == 1)
+	{
+		return true;
+	}
+	else
+	{
+		if (num % i == 0)
+		{
+			return false;
+		}
+		else
+		{
+			return isprime(num, i - 1);
+		}
+	}
+}
+
+void generate(int idx) {
+	if (idx == 0) {
+		position[idx] = 1;
+		generate(idx + 1);
+		return;
+	}
+	else if (idx == N) {
+		int flag = 1;
+		for (int k = 0; k < N; k++) {
+			int sum = position[k] + position[(k + 1) % N];
+			if (!isprime(sum, sum / 2)) {
+				flag = 0;
+				break;
+			}
+		}
+		if (flag==1) {
+			for (int k = 0; k < N; k++) {
+				cout << position[k] << " ";
+			}
+			cout << endl;
+		}
+		return;
+	}
+	else {
+		for (int i = 2; i <= N; i++) {
+			if (taken[i - 1] == 0) {
+				taken[i - 1] = 1;
+				position[idx] = i;
+				generate(idx + 1);
+				taken[i - 1] = 0;
+			}
+		}
+	}
+	
+}
+
+int main() {
+	int l = 0;
+	while (1) {
+		cin >> n[l];
+		l++;
+		char c1 = cin.get();
+		char c2 = cin.peek();
+		if (c2 == '\n')
+		{
+			break;
+		}
+	}
+	for (int i = 0; i < l; i++) {
+		N = n[i];
+		cout << "Case" << " " << i+1 << ":" << endl;
+		generate(0);
+		cout << endl;
+	}
+	system("pause");
+	return 0;
+}
+

@@ -1,0 +1,61 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+
+int edges[10][10],cnt[10], N, E,color[10],d[10],f[10],task[10];
+
+void topsort(int time, int u) {
+	color[u-1] = 1;
+	time++;
+	d[u-1] = time;
+
+	for (int i = 0; i < cnt[u - 1]; i++) {
+		int v = edges[u - 1][i];
+		if (color[v-1] == 0) {
+			topsort(time, v);
+		}
+	}
+
+	color[u-1] = 2;
+	time++;
+	f[u - 1] = time;
+}
+
+int main() {
+
+	N = 5;
+	int E = 4;
+	int a, b;
+	for (int i = 0; i < N; i++) {
+		cnt[i] = 0;
+		task[i] = i+1;
+		d[i] = 0;
+		f[i] = 0;
+		color[i] = 0;
+	}
+	for (int i = 0; i < E; i++) {
+		cin >> a >> b;
+		edges[a - 1][cnt[a - 1]] = b;
+		cnt[a - 1]++;
+	}
+	int ti = 0;
+	topsort(ti, 1);
+	int temp1, temp2;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < (N - 1 - i); j++) {
+			if (f[j] > f[j + 1]) {
+				temp1 = f[j + 1];
+				f[j + 1] = f[j];
+				f[j] = temp1;
+				temp2 = task[j + 1];
+				task[j + 1] = task[j];
+				task[j] = temp2;
+			}
+		}
+	}
+	for (int i = 0; i < N; i++) {
+		cout << task[i] << " ";
+	}
+	system("pause");
+	return 0;
+}

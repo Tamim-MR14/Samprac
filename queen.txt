@@ -1,0 +1,66 @@
+#include<iostream>
+using namespace std;
+
+
+int taken[4][4];
+
+
+bool is_possible(int x, int y) {
+	int i, j;
+	for (i = 0; i < 4; i++) {
+		if (taken[x][i] == 1 || taken[i][y] == 1) {
+			return false;
+		}
+	}
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			if (((i + j) == (x + y) || (i - j) == (x - y)) && taken[i][j] == 1) {
+				return false;
+			}
+		}
+	}
+	
+	return true;
+}
+
+void print() {
+	int i, j;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			cout << taken[i][j] << '\t' ;
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+
+bool queen(int idx) {
+	if (idx >= 4) {
+		print();
+		return true;
+	}
+
+	int i;
+
+	for ( i = 0; i < 4; i++) {
+		if (is_possible(i, idx)) {
+			taken[i][idx] = 1;
+			queen(idx + 1);
+			taken[i][idx] = 0;
+		}
+	}
+	return false;
+}
+
+int main() {
+	int i, j;
+
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			taken[i][j] = 0;
+		}
+	}
+	queen(0);
+	system("pause");
+	return 0;
+}

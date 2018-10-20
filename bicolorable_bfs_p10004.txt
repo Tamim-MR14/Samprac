@@ -1,0 +1,129 @@
+#include<iostream>
+using namespace std;
+
+int edges[10][10], parent[10], visited[10], level[10], cnt[10], N, E,color0=0,color1=0;
+
+
+class queue {
+	int head, tail, cap;
+	char arr[100];
+public:
+	queue(int capacity) {
+		head = -1;
+		tail = -1;
+		cap = capacity;
+	}
+
+	void enqueue(int x) {
+		if (tail == -1) {
+			tail = 0;
+			head = 0;
+			arr[tail] = x;
+
+		}
+		else if (head == (tail + 1) % cap) {
+			cout << "The queue is full.";
+		}
+		else {
+			tail = (tail + 1) % cap;
+			arr[tail] = x;
+		}
+	}
+
+	int dequeue() {
+		if (head == -1) {
+			throw "The queue is empty";
+
+		}
+		else if (head == tail) {
+			tail--;
+			int x = arr[head];
+			head--;
+			return  x;
+		}
+		else {
+			int x = arr[head];
+			head = (head + 1) % cap;
+			return x;
+		}
+	}
+
+	bool is_empty() {
+		if (head == -1) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+};
+
+bool bfs(int n, queue a) {
+	a.enqueue(n);
+	level[n] = 0;
+	color0++;
+	while (!a.is_empty()) {
+		int b = a.dequeue();
+		for (int i = 0; i < cnt[b]; i++) {
+			if (level[edges[b][i]] == -1) {
+				level[edges[b][i]] = level[b] + 1;
+				if (level[edges[b][i]] % 2 == 0) {
+					color0++;
+				}
+				else {
+					color1++;
+				}
+				parent[edges[b][i]] = b;
+				a.enqueue(edges[b][i]);
+			}
+			else {
+				if (level[edges[b][i]]%2 != (level[b] + 1)%2) {
+					return false;
+				}
+			}
+
+		}
+	}
+	return true;
+}
+
+
+
+
+int main() {
+	/*queue a(3);
+	//cout << a.dequeue() << endl;
+	a.enqueue(5);
+
+	try {
+	cout << a.dequeue() << endl;
+	int b = a.dequeue();
+	cout << b << endl;
+	cout << a.is_empty();
+	cout << a.dequeue() << endl;
+	}catch (const char* msg) {
+	cerr << msg << endl;
+	}*/
+
+	N = 9;
+	int E =8;
+	int a, b;
+	for (int i = 0; i < N; i++) {
+		cnt[i] = 0;
+		level[i] = -1;
+	}
+	for (int i = 0; i < E; i++) {
+		cin >> a >> b;
+		edges[a][cnt[a]] = b;
+		cnt[a]++;
+		edges[b][cnt[b]] = a;
+		cnt[b]++;
+	}
+	queue c(100);
+	cout << bfs(1, c) << endl;
+	for (int i = 0; i < N; i++) {
+		cout << level[i];
+	}
+	system("pause");
+	return 0;
+}
